@@ -25,10 +25,7 @@ $ ./uncompress ctest.bin recovered.bin
 Working with intersections
 --------------------------
 
-First, you must get the clueweb09 dataset (or a similar data set). You can get
-a copy of the datasets we used at 
-
-http://lemire.me/data/integercompression2014.html
+First, you must get the clueweb09 dataset (or a similar data set). 
 
 
 You need a posting list file in a flat format: a sequence of arrays stored as a 32-bit unsigned integer
