@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMDCompressionAndIntersection — Decoding billions of integers per second</title>
+<meta name="description" content="A C/C++ library for fast SIMD compression and intersection of sorted lists of integers. Decode at least 4 billion compressed integers per second (15 GB/s).">
+<meta property="og:title" content="SIMDCompressionAndIntersection">
+<meta property="og:description" content="Fast SIMD compression and intersection of sorted lists of integers — decode billions of integers per second.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50' y='70' font-size='62' font-family='monospace' font-weight='bold' text-anchor='middle' fill='white'>&lt;/&gt;</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark">SIMD</span><span class="brand-rest">Compression&amp;Intersection</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#highlights">Highlights</a>
+      <a href="#quickstart">Quick&nbsp;start</a>
+      <a href="#features">Features</a>
+      <a href="#publications">Publications</a>
+      <a class="nav-gh" href="https://github.com/fast-pack/SIMDCompressionAndIntersection" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1>Decoding <span class="grad">billions of integers</span> per second.</h1>
+        <p class="lede">
+          A C/C++ library for fast <strong>compression</strong> and <strong>intersection</strong>
+          of sorted lists of integers using SIMD instructions — with particular attention to
+          differential coding and novel schemes such as SIMD&nbsp;Galloping.
+        </p>
+        <div class="hero-stats">
+          <div class="stat"><span class="num">4&nbsp;billion+</span><span class="lbl">integers decoded / second</span></div>
+          <div class="stat"><span class="num">15&nbsp;GB/s</span><span class="lbl">decompression throughput</span></div>
+          <div class="stat"><span class="num">&gt; gzip · LZ4 · Snappy</span><span class="lbl">far faster than generic codecs</span></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://github.com/fast-pack/SIMDCompressionAndIntersection" target="_blank" rel="noopener">★ Star on GitHub</a>
+          <a class="btn btn-ghost" href="#quickstart">Get started</a>
+        </div>
+        <div class="hero-badges">
+          <img alt="Ubuntu CI" src="https://github.com/lemire/SIMDCompressionAndIntersection/actions/workflows/ubuntu22.yml/badge.svg">
+          <img alt="Visual Studio CI" src="https://github.com/lemire/SIMDCompressionAndIntersection/actions/workflows/visualstudio.yml/badge.svg">
+        </div>
+      </div>
+
+      <div class="hero-code">
+        <div class="code-card">
+          <div class="code-head">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="code-file">example.cpp</span>
+          </div>
+<pre class="code"><code><span class="c1">// Pick a codec and compress sorted integers</span>
+<span class="t">IntegerCODEC</span> &amp;codec =
+    *<span class="t">CODECFactory</span>::getFromName(<span class="s">"s4-fastpfor-d1"</span>);
+
+codec.<span class="fn">encodeArray</span>(input.data(), input.size(),
+                  out.data(), outSize);
+
+<span class="c1">// SIMD intersection of two sorted lists</span>
+<span class="t">auto</span> inter =
+    <span class="t">IntersectionFactory</span>::getFromName(<span class="s">"simd"</span>);
+<span class="t">size_t</span> n = <span class="fn">inter</span>(a.data(), a.size(),
+                 b.data(), b.size(), a.data());</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Highlights -->
+  <section id="highlights" class="section">
+    <div class="container">
+      <h2 class="section-title">Why this library</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="ic">⚡</div>
+          <h3>Fast</h3>
+          <p>Decodes at least 4&nbsp;billion compressed integers per second on most desktop and laptop CPUs — roughly 15&nbsp;GB/s.</p>
+        </article>
+        <article class="card">
+          <div class="ic">▦</div>
+          <h3>SIMD-accelerated</h3>
+          <p>Built on SSE/AVX vector instructions to pack, unpack and intersect integers many lanes at a time.</p>
+        </article>
+        <article class="card">
+          <div class="ic">↗</div>
+          <h3>Sorted-integer focused</h3>
+          <p>Specialized for sorted lists with first-class differential (delta) coding — ideal for inverted indexes and posting lists.</p>
+        </article>
+        <article class="card">
+          <div class="ic">⨯</div>
+          <h3>SIMD Galloping</h3>
+          <p>Introduces new vectorized intersection schemes, including SIMD&nbsp;Galloping, for very fast set intersection.</p>
+        </article>
+        <article class="card">
+          <div class="ic">⌥</div>
+          <h3>Many codecs</h3>
+          <p>FastPFOR, BP128, StreamVByte, Frame-of-Reference, Masked&nbsp;VByte, VarintGB and more — selectable by name.</p>
+        </article>
+        <article class="card">
+          <div class="ic">🎓</div>
+          <h3>Peer reviewed</h3>
+          <p>Backed by peer-reviewed research in <em>Software: Practice &amp; Experience</em>, <em>ACM TOIS</em> and more.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick start -->
+  <section id="quickstart" class="section section-alt">
+    <div class="container quickstart">
+      <div class="quickstart-copy">
+        <h2 class="section-title">From clone to running in three commands</h2>
+        <p>The library builds a static archive plus a header set you can drop into your own project.
+           On Linux, macOS and similar systems:</p>
+        <div class="terminal">
+<pre><code><span class="pr">$</span> git clone https://github.com/fast-pack/SIMDCompressionAndIntersection
+<span class="pr">$</span> cd SIMDCompressionAndIntersection
+<span class="pr">$</span> make && ./unit</code></pre>
+        </div>
+        <p class="muted">
+          A static library <code>libSIMDCompressionAndIntersection.a</code> is produced, with headers
+          in <code>include/</code>. Build the demo with <code>make example &amp;&amp; ./example</code>.
+          Windows users build with <code>nmake -f .\makefile.vc</code>.
+        </p>
+      </div>
+      <div class="quickstart-code">
+        <div class="code-card">
+          <div class="code-head">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="code-file">roundtrip.cpp</span>
+          </div>
+<pre class="code"><code><span class="pp">#include</span> <span class="s">"codecfactory.h"</span>
+<span class="pp">#include</span> <span class="s">"intersection.h"</span>
+<span class="k">using namespace</span> SIMDCompressionLib;
+
+<span class="t">IntegerCODEC</span> &amp;codec =
+    *<span class="t">CODECFactory</span>::getFromName(<span class="s">"s4-fastpfor-d1"</span>);
+
+<span class="c1">// compress</span>
+<span class="t">size_t</span> outSize = out.size();
+codec.<span class="fn">encodeArray</span>(in.data(), in.size(),
+                  out.data(), outSize);
+
+<span class="c1">// decompress — exact, lossless round-trip</span>
+<span class="t">size_t</span> recovered = back.size();
+codec.<span class="fn">decodeArray</span>(out.data(), outSize,
+                  back.data(), recovered);</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2 class="section-title">What's inside</h2>
+      <p class="section-sub">Pick any scheme by name through <code>CODECFactory</code> or <code>IntersectionFactory</code>.</p>
+      <div class="feature-grid">
+        <div class="feature">
+          <h4>Bit packing</h4>
+          <p>SIMD bit-packing (BP128 / s4-bp128) with optional delta coding in 1, 2 or 4 lanes.</p>
+        </div>
+        <div class="feature">
+          <h4>FastPFOR</h4>
+          <p>Patched frame-of-reference codec tuned for sorted data, including <code>s4-fastpfor-d1</code>.</p>
+        </div>
+        <div class="feature">
+          <h4>Stream VByte</h4>
+          <p>Faster byte-oriented integer compression using control streams and shuffles.</p>
+        </div>
+        <div class="feature">
+          <h4>Varint family</h4>
+          <p>VByte, Masked VByte, VarintGB and VarintG8IU variable-length encodings.</p>
+        </div>
+        <div class="feature">
+          <h4>Frame of Reference</h4>
+          <p>Classic and SIMD frame-of-reference compression for tightly clustered values.</p>
+        </div>
+        <div class="feature">
+          <h4>SIMD intersection</h4>
+          <p>Vectorized set intersection, including SIMD Galloping, for sorted posting lists.</p>
+        </div>
+        <div class="feature">
+          <h4>Differential coding</h4>
+          <p>In-place and on-the-fly delta coding to exploit the structure of sorted integers.</p>
+        </div>
+        <div class="feature">
+          <h4>Cross-platform</h4>
+          <p>Tested on Linux, macOS and Windows; SSE2 minimum, SSE&nbsp;4.1 / AVX recommended.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Backed by research</h2>
+      <p class="section-sub">The techniques in this library are described in peer-reviewed publications.</p>
+      <ul class="pubs">
+        <li>
+          <a href="https://arxiv.org/abs/1709.08990" target="_blank" rel="noopener">Stream VByte: Faster Byte-Oriented Integer Compression</a>
+          <span class="pub-venue">Daniel Lemire, Nathan Kurz, Christoph Rupp — Information Processing Letters 130, 2018</span>
+        </li>
+        <li>
+          <a href="http://arxiv.org/abs/1401.6399" target="_blank" rel="noopener">SIMD Compression and the Intersection of Sorted Integers</a>
+          <span class="pub-venue">Daniel Lemire, Leonid Boytsov, Nathan Kurz — Software: Practice &amp; Experience 46(6), 2016</span>
+        </li>
+        <li>
+          <a href="http://arxiv.org/abs/1209.2137" target="_blank" rel="noopener">Decoding billions of integers per second through vectorization</a>
+          <span class="pub-venue">Daniel Lemire, Leonid Boytsov — Software: Practice &amp; Experience 45(1), 2015</span>
+        </li>
+        <li>
+          <a href="http://arxiv.org/abs/1503.07387" target="_blank" rel="noopener">Vectorized VByte Decoding</a>
+          <span class="pub-venue">Jeff Plaisance, Nathan Kurz, Daniel Lemire — International Symposium on Web Algorithms, 2015</span>
+        </li>
+        <li>
+          <a href="http://arxiv.org/abs/1502.01916" target="_blank" rel="noopener">A General SIMD-based Approach to Accelerating Compression Algorithms</a>
+          <span class="pub-venue">W. X. Zhao, X. Zhang, D. Lemire, et al. — ACM Transactions on Information Systems 33(3), 2015</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Related -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Related libraries</h2>
+      <div class="related">
+        <a class="rel" href="https://github.com/lemire/simdcomp" target="_blank" rel="noopener"><strong>simdcomp</strong><span>A simpler companion library written in pure C.</span></a>
+        <a class="rel" href="https://github.com/lemire/FastPFor" target="_blank" rel="noopener"><strong>FastPFor</strong><span>C++ integer compression, not specialized for sorted lists.</span></a>
+        <a class="rel" href="https://github.com/lemire/JavaFastPFOR" target="_blank" rel="noopener"><strong>JavaFastPFOR</strong><span>Integer compression for the JVM.</span></a>
+        <a class="rel" href="https://github.com/lemire/FrameOfReference" target="_blank" rel="noopener"><strong>FrameOfReference</strong><span>Dedicated frame-of-reference compression in C++.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container cta-inner">
+      <h2>Ready to compress at SIMD speed?</h2>
+      <p>Apache 2.0 licensed, patent-free as far as the authors know, and battle-tested across platforms.</p>
+      <a class="btn btn-primary btn-lg" href="https://github.com/fast-pack/SIMDCompressionAndIntersection" target="_blank" rel="noopener">Get it on GitHub ↗</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-col">
+      <div class="brand"><span class="brand-mark">SIMD</span><span class="brand-rest">Compression&amp;Intersection</span></div>
+      <p class="muted small">Fast SIMD compression and intersection of sorted integers.<br>Apache License 2.0.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Project</h5>
+      <a href="https://github.com/fast-pack/SIMDCompressionAndIntersection" target="_blank" rel="noopener">Source code</a>
+      <a href="https://github.com/fast-pack/SIMDCompressionAndIntersection/issues" target="_blank" rel="noopener">Issue tracker</a>
+      <a href="https://github.com/fast-pack/SIMDCompressionAndIntersection/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+    </div>
+    <div class="footer-col">
+      <h5>Authors</h5>
+      <p class="muted small">Leonid Boytsov, Nathan Kurz, Daniel Lemire, Owen Kaser, Andrew Consroe, Shlomi Vaknin, Christoph Rupp, Bradley Grainger, and others.</p>
+    </div>
+  </div>
+  <div class="container footer-bottom muted small">
+    Supported by NSERC grant 26143. Built with vector instructions and care.
+  </div>
+</footer>
+
+</body>
+</html>
