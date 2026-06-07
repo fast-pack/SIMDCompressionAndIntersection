@@ -433,6 +433,7 @@ public:
         }
         assert(i == onePost.end());
         assert(sanitycheck == onePost.size());
+        (void)sanitycheck;
         compPostings.emplace(id, subposts);
         uncompsizes.emplace(id, subsizes);
         packTime += static_cast<double>(z.split());
@@ -772,6 +773,7 @@ public:
         }
         assert(i == onePost.end());
         assert(sanitycheck == onePost.size());
+        (void)sanitycheck;
         packTime += static_cast<double>(z.split());
       }
     }

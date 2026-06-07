@@ -1,9 +1,8 @@
 /**
  * This code is released under a BSD License.
  */
-#include <smmintrin.h>
 #include <stdint.h>
-#include "platform.h"
+#include "platform.h" /* SIMD intrinsics: SSE4.1 on x86, NEON on ARM */
 
 #ifdef USE_ALIGNED
 #define MM_LOAD_SI_128 _mm_load_si128

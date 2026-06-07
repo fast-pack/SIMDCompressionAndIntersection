@@ -1,0 +1,34 @@
+name: "Ubuntu 24.04 ARM64 CI (NEON)"
+on: [push, pull_request]
+
+
+jobs:
+  make-arm:
+    name: "make (SSE intrinsics mapped to ARM NEON)"
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]') && ! contains(toJSON(github.event.commits.*.message), '[skip github]')"
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Build and test"
+        run: make && ./unit
+
+  cmake-arm:
+    name: "cmake + ctest + install"
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]') && ! contains(toJSON(github.event.commits.*.message), '[skip github]')"
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Configure"
+        run: cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/_install
+      - name: "Build"
+        run: cmake --build build -j
+      - name: "Test"
+        run: ctest --test-dir build --output-on-failure
+      - name: "Install"
+        run: cmake --install build
+      - name: "Consume via find_package"
+        run: |
+          cmake -S tests/find_package -B build_consumer \
+            -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/_install
+          cmake --build build_consumer
+          ./build_consumer/consumer

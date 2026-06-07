@@ -55,6 +55,8 @@ public:
     }
     nvalue = mynvalue1;
     assert(initin + length >= in2);
+    (void)initin;
+    (void)length;
     return in2;
   }
   string name() const {

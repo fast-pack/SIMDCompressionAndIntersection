@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+# Imported targets (defines SIMDCompressionAndIntersection::SIMDCompressionAndIntersection)
+include("${CMAKE_CURRENT_LIST_DIR}/SIMDCompressionAndIntersectionTargets.cmake")
+
+check_required_components(SIMDCompressionAndIntersection)

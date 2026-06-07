@@ -93,7 +93,12 @@ template <class T> CONST_FUNCTION const T *padTo32bits(const T *inbyte) {
                                      ~3);
 }
 
-#ifndef _MSC_VER
+#if defined(_MSC_VER)
+inline uint32_t asmbits(const uint32_t v) {
+  unsigned long index;
+  return (v == 0 || _BitScanReverse(&index, v) == 0) ? 0 : (index + 1);
+}
+#elif defined(__x86_64__) || defined(__i386__)
 CONST_FUNCTION
 inline uint32_t asmbits(const uint32_t v) {
   if (v == 0)
@@ -103,9 +108,10 @@ inline uint32_t asmbits(const uint32_t v) {
   return answer + 1;
 }
 #else
+/* Portable fallback (e.g. ARM): bsr(v)+1 == 32 - clz(v) for v != 0. */
+CONST_FUNCTION
 inline uint32_t asmbits(const uint32_t v) {
-  unsigned long index;
-  return (v == 0 || _BitScanReverse(&index, v) == 0) ? 0 : (index + 1);
+  return v == 0 ? 0 : 32 - static_cast<uint32_t>(__builtin_clz(v));
 }
 #endif
 

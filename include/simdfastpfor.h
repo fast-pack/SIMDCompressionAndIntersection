@@ -86,6 +86,8 @@ public:
       out += thissize;
     }
     assert(initin + length >= in);
+    (void)initin;
+    (void)length;
     bpacker.reset(); // if you don't do this, the codec has a "memory".
     return in;
   }
@@ -123,6 +125,7 @@ public:
       in += thissize;
     }
     assert(out == nvalue + initout);
+    (void)initout;
     if (oldnvalue < nvalue)
 			std::cerr
 					<< "It is possible we have a buffer overrun. You reported having allocated "

@@ -78,6 +78,7 @@ public:
     size_t decoded =
         headlessDecode(inbyte, (length - 1) * sizeof(uint32_t), 0, out, nvalue);
     assert(decoded == nvalue);
+    (void)decoded;
     return in + length;
   }
 
@@ -91,6 +92,7 @@ public:
     inbyte += 4;
     size_t decoded = headlessDecode(inbyte, length - 4, 0, out, nvalue);
     assert(decoded == nvalue);
+    (void)decoded;
     return inbyte + length;
   }
 
@@ -208,6 +210,7 @@ public:
         size_t decoded = headlessDecode(inbyte, finalinbyte - inbyte, initial,
                                         tmpbuffer + 1, nvalue - i);
         assert(decoded == nvalue - i);
+        (void)decoded;
         sortinfirstvalue(tmpbuffer, nvalue - i);
         const uint8_t *const newfinalinbyte =
             headlessEncode(tmpbuffer, nvalue - i + 1, initial, inbyte);
@@ -286,6 +289,7 @@ public:
         size_t decoded = headlessDecode(inbyte, finalinbyte - inbyte, initial,
                                         tmpbuffer + 1, nvalue - i);
         assert(decoded == nvalue - i);
+        (void)decoded;
         sortinfirstvalue(tmpbuffer, nvalue - i);
       }
       const uint8_t *const newfinalinbyte =

@@ -70,6 +70,42 @@ To run tests, you can do
 (follow the instructions)
 
 
+Building and installing with CMake
+------------------------
+
+A CMake build is also provided. It works on x86/x64 (SSE/AVX) and on 64-bit ARM
+(the SSE intrinsics are mapped to ARM NEON), and it builds the same library and
+tests as the Makefile.
+
+```
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build          # runs the unit tests
+```
+
+To install the library, headers and a CMake package configuration:
+
+```
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/your/prefix -DSIMDCOMP_BUILD_TESTS=OFF
+cmake --build build
+cmake --install build
+```
+
+Downstream CMake projects can then locate it with `find_package` and link the
+imported target:
+
+```cmake
+find_package(SIMDCompressionAndIntersection REQUIRED)
+target_link_libraries(yourapp PRIVATE
+  SIMDCompressionAndIntersection::SIMDCompressionAndIntersection)
+```
+
+The installed headers live under `<prefix>/include/SIMDCompressionAndIntersection`
+and are added to your include path by the imported target, so `#include
+<codecfactory.h>` works directly. Useful options: `-DSIMDCOMP_BUILD_TESTS=OFF`
+to skip the tests/benchmarks and `-DSIMDCOMP_INSTALL=OFF` to disable install
+rules (handy when consuming the project via `add_subdirectory`).
+
 
 Usage (Windows users)
 ------------------------
@@ -125,18 +161,26 @@ As far as the authors know, this work is patent-free.
 Requirements
 ------------------------
 
-A CPU (AMD or Intel) with support for SSE2 (Pentium 4 or better) is required
-while a CPU with SSE 4.1* (Penryn  [2007] processors or better) is recommended. 
+On x86/x64, a CPU (AMD or Intel) with support for SSE2 (Pentium 4 or better) is
+required while a CPU with SSE 4.1* (Penryn  [2007] processors or better) is
+recommended.
 
+On 64-bit ARM (AArch64, e.g. Apple Silicon and ARM servers), the SSE intrinsics
+are mapped to ARM NEON via `include/neon_sse.h`, so no x86 hardware is needed.
+NEON is baseline on AArch64, so no special compiler flag is required.
 
 A recent GCC (4.7 or better), Clang, Intel or Visual C++ compiler.
 
-A processor support AVX (Intel or AMD).
+On x86, a processor supporting AVX (Intel or AMD) is assumed by the default
+makefile (but AVX is not required, see below).
 
-Tested on Linux, MacOS and Windows. It should be portable to other platforms.
+Tested on Linux, MacOS and Windows, on both x64 and ARM64. It should be portable
+to other platforms.
 
-*- The default makefile might assume AVX support, but AVX is not required. For GCC
-compilers, you might need the -msse2 flag, but you will not need the -mavx flag.
+*- On x86, the default makefile might assume AVX support, but AVX is not
+required. For GCC compilers, you might need the -msse2 flag, but you will not
+need the -mavx flag. On ARM64 the makefile automatically drops the x86 `-mavx`
+flag.
 
 For advanced benchmarking, please see
 

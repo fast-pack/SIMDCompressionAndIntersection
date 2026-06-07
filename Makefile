@@ -16,12 +16,20 @@ else
 endif # debug
 else #intel
     CXX ?= g++-4.7
-ifeq ($(DEBUG),1)
-    CXXFLAGS = -fpic -mavx -std=c++11  -Weffc++ -pedantic -ggdb -DDEBUG=1 -D_GLIBCXX_DEBUG -Wall  -Wextra -Wextra -Wsign-compare  -Wwrite-strings -Wpointer-arith -Winit-self  -Wno-sign-conversion
-    CCFLAGS = -fpic -mavx -std=c99  -pedantic -ggdb -DDEBUG=1 -D_GLIBCXX_DEBUG -Wall  -Wextra -Wsign-compare -Wwrite-strings -Wpointer-arith -Winit-self  -Wno-sign-conversion
+# On x86 we target AVX; on ARM (AArch64) NEON is baseline, so no -m flag is
+# needed (the SSE intrinsics are mapped to NEON via include/neon_sse.h).
+    ARCH := $(shell uname -m)
+ifneq (,$(filter x86_64 amd64 i386 i686,$(ARCH)))
+    SIMDFLAGS ?= -mavx
 else
-    CXXFLAGS = -fpic -mavx -std=c++11  -Weffc++ -pedantic -O3 -Wall  -Wextra -Wsign-compare  -Wwrite-strings -Wpointer-arith -Winit-self  -Wno-sign-conversion
-    CCFLAGS = -fpic -mavx -std=c99 -pedantic -O3 -Wall -Wextra -Wsign-compare -Wwrite-strings -Wpointer-arith -Winit-self -Wno-sign-conversion
+    SIMDFLAGS ?=
+endif
+ifeq ($(DEBUG),1)
+    CXXFLAGS = -fpic $(SIMDFLAGS) -std=c++11  -Weffc++ -pedantic -ggdb -DDEBUG=1 -D_GLIBCXX_DEBUG -Wall  -Wextra -Wextra -Wsign-compare  -Wwrite-strings -Wpointer-arith -Winit-self  -Wno-sign-conversion
+    CCFLAGS = -fpic $(SIMDFLAGS) -std=c99  -pedantic -ggdb -DDEBUG=1 -D_GLIBCXX_DEBUG -Wall  -Wextra -Wsign-compare -Wwrite-strings -Wpointer-arith -Winit-self  -Wno-sign-conversion
+else
+    CXXFLAGS = -fpic $(SIMDFLAGS) -std=c++11  -Weffc++ -pedantic -O3 -DNDEBUG=1 -Wall  -Wextra -Wsign-compare  -Wwrite-strings -Wpointer-arith -Winit-self  -Wno-sign-conversion
+    CCFLAGS = -fpic $(SIMDFLAGS) -std=c99 -pedantic -O3 -DNDEBUG=1 -Wall -Wextra -Wsign-compare -Wwrite-strings -Wpointer-arith -Winit-self -Wno-sign-conversion
 endif #debug
 endif #intel
 

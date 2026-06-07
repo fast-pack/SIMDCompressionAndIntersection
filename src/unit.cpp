@@ -1023,6 +1023,7 @@ int main() {
       ++error;
     }
     assert(error == 0);
+    (void)error;
   }
 
   vector<shared_ptr<IntegerCODEC>> allcodecs = CODECFactory::allSchemes();

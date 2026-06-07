@@ -9,7 +9,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#include <immintrin.h>
+#include "platform.h" /* pulls in the SIMD intrinsics (SSE on x86, NEON on ARM) */
 #include <iso646.h>
 #include <limits.h>
 #ifndef _MSC_VER

@@ -6,9 +6,13 @@ compflatstat
 compress
 entropy
 *.o
+ramtocache
 simplesynth
 testcodecs
 testintegration
 uncompress
 unit
 *.a
+build/
+build_consumer/
+_install/
